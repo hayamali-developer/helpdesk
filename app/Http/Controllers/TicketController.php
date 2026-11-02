@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+       protected TicketService $ticketService
+    ){
+
+    }
+   
     public function index(Request $request)
     {
         $this->authorize("viewAny", Ticket::class);
@@ -38,14 +42,14 @@ class TicketController extends Controller
          public function store(StoreTicketRequest $request)
     {
         $this->authorize("create", Ticket::class);
-        $ticket=$request->user()->tickets()->create([
-           'title' => $request->validated('title'),
-        'description' => $request->validated('description'),
-        'priority' => $request->validated('priority', 'medium'),
-        ]);
+         $ticket = $this->ticketService->createTicket(
+        $request->validated(), 
+        $request->user()
+    );
 
-        return (new TicketResource($ticket))->response()
-        ->withStatusCode(Response::HTTP_CREATED);
+    return (new TicketResource($ticket))
+        ->response()
+        ->setStatusCode(Response::HTTP_CREATED);
     }
     /**
      * Display the specified resource.
