@@ -25,9 +25,9 @@ class StoreTicketRequest extends FormRequest
     {
         return [
            "title" =>['required','string','max:255'],
-           "description" =>['required','text'],
+           "description" =>['required','string'],
            "priority" =>['sometimes',Rule::in(['low','medium','high','urgent'])],
-           'status' => ['required', Rule::in(['open', 'in_progress', 'resolved', 'closed'])],
+           "status" => ['sometimes', Rule::in(['open', 'in_progress', 'resolved', 'closed'])],
         ];
     }
 }
