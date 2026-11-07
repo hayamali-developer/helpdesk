@@ -23,6 +23,11 @@ class Ticket extends Model
     ];
 
 
+    protected $attributes = [
+        'status' => 'open',
+    ] ;
+
+
     public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
@@ -30,14 +35,18 @@ class Ticket extends Model
 
 
     public function scopeForUser($query, $user){
-   if(!$user->hasRole("admin")){
-    return $query->where('user_id', $user->id);
+   if(!$user || $user->role !=="admin"){
+    $userId= $user ? $user->id : null;
+    return $query->where('user_id', $userId);
    }
    return $query;
 }  
 
 
 public function scopeWithStatus($query, $status){
+    if(!$status){
+       return $query;
+    }
 
 return $query->where('status', $status);
 
@@ -46,15 +55,21 @@ return $query->where('status', $status);
 
 public function scopeWithPriority($query, $priority){
 
+  if(!$priority){
+       return $query;
+    }
+
    return $query->where('priority', $priority);
 }
 
 
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
