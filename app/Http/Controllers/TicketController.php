@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Services\TicketService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response; 
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class TicketController extends Controller
 {
+    use AuthorizesRequests;
     public function __construct(
        protected TicketService $ticketService
-    ){
-
-    }
+    ){}
    
     public function index(Request $request)
     {
@@ -42,10 +42,8 @@ class TicketController extends Controller
          public function store(StoreTicketRequest $request)
     {
         $this->authorize("create", Ticket::class);
-         $ticket = $this->ticketService->createTicket(
-        $request->validated(), 
-        $request->user()
-    );
+        $ticket = $this->ticketService->createTicket($request->validated(), 
+        $request->user());
 
     return (new TicketResource($ticket))
         ->response()
