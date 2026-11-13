@@ -14,6 +14,7 @@ class Ticket extends Model
         'description',
         'priority',
         'status',
+        'assignee_id'
 
     ];
 
@@ -62,14 +63,22 @@ public function scopeWithPriority($query, $priority){
    return $query->where('priority', $priority);
 }
 
+public function assignee(){
+
+return $this->belongsTo(User::class,'assignee_id');
+}
+  
+  public function canTransactionTo(TicketStatus $newStatus): bool
+  {
+    return $this->status->canTransactionTo($newStatus);
+  }
+
+
+
+
+
+
+
+
 
 }
-
-
-
-
-
-
-
-
-

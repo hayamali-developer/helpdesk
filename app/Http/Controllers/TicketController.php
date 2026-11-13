@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTicketRequest;
+use App\Http\Requests\UpdateTicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Services\TicketService;
@@ -68,9 +69,13 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTicketRequest $request,Ticket $ticket)
     {
-        //
+      $this->authorize("update", $ticket);
+      $updateTicket=$this->ticketService->updateTicket($ticket ,$request->validated());
+      return (new TicketResource($updateTicket))->response()
+      ->setStatusCode(Response::HTTP_OK);
+
     }
 
     /**
