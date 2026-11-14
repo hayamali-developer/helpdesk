@@ -22,7 +22,9 @@ class TicketPolicy
      */
     public function view(User $user, Ticket $ticket): bool
     {
-        return $user->id === $ticket->user_id || $user->hasRole('admin');
+        return $user->id === $ticket->user_id 
+        || $user->id === $ticket->assignee_id
+        || $user->role->canManageTickets();
     }
 
     /**
@@ -38,6 +40,10 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket): bool
     {
+        return $user->role->canManageTickets();
+    }
+
+    public function assign(User $user, Ticket $ticket): bool{
         return $user->role->canManageTickets();
     }
 
