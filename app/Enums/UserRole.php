@@ -16,10 +16,18 @@ enum UserRole :string
 
     public function canManageTickets(): bool
     {
-        return in_array($this, [
+        return in_array($this,self::managementRoles() , true);
+    }
+
+
+
+       public static function managementRoles(): array
+    {
+        return [
             self::ADMIN,
             self::USER,
             self::SUPPORT_AGENT,
-        ]);
+        ];
     }
+
 }
