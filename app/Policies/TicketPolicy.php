@@ -40,7 +40,7 @@ class TicketPolicy
      */
     public function update(User $user, Ticket $ticket): bool
     {
-        return $user->role->canManageTickets();
+        return $user->role?->canManageTickets() ?? false;
     }
 
     public function assign(User $user, Ticket $ticket): bool{
