@@ -25,7 +25,6 @@ enum UserRole :string
     {
         return [
             self::ADMIN,
-            self::USER,
             self::SUPPORT_AGENT,
         ];
     }

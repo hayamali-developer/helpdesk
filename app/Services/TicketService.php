@@ -29,15 +29,11 @@ public function __construct(
  }
 
 
- public function updateTicket(array $data ,Ticket $ticket){
+public function updateTicket(Ticket $ticket, array $data): Ticket
+    {
+        $ticket->update($data);
 
-   if(isset($data['status']) && is_string($data['status'])){
-    $data['status']= TicketStatus::tryFrom($data['status']);
-   }
-    
-      $ticket->update($data);
-      return $ticket->load(["user","assignee"]);
-
- }
+        return $ticket->fresh();
+    }
 
 }
