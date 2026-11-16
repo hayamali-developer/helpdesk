@@ -71,7 +71,7 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request,Ticket $ticket)
     {
-      $updateTicket=$this->ticketService->updateTicket($ticket ,$request->validated());
+      $updateTicket=$this->ticketService->updateTicket($request->validated(),$ticket);
       return (new TicketResource($updateTicket))->response()
       ->setStatusCode(Response::HTTP_OK);
     }
