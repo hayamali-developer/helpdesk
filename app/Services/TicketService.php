@@ -29,7 +29,7 @@ public function __construct(
  }
 
 
-public function updateTicket(Ticket $ticket, array $data): Ticket
+public function updateTicket(array $data,Ticket $ticket): Ticket
     {
         $ticket->update($data);
 
