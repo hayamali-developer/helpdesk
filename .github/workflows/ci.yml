@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+      - name: Install dependencies
+        if: hashFiles('composer.json') != ''
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Prepare Laravel
+        if: hashFiles('artisan') != ''
+        run: |
+          cp -n .env.example .env || true
+          php artisan key:generate --force
+      - name: Run the tests
+        run: |
+          if [ -f vendor/bin/pest ]; then vendor/bin/pest
+          elif [ -f vendor/bin/phpunit ]; then vendor/bin/phpunit
+          elif [ -f artisan ]; then php artisan test
+          else echo "No tests yet."
+          fi
+
+  style:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+      - name: Install dependencies
+        if: hashFiles('composer.json') != ''
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Check the code style
+        run: |
+          if [ -f vendor/bin/pint ]; then vendor/bin/pint --test
+          else echo "Pint is not installed yet."
+          fi
