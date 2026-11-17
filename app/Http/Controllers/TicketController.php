@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTicketRequest;
 use App\Http\Resources\TicketResource;
 use App\Models\Ticket;
 use App\Services\TicketService;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\JsonResponse;
 
 class TicketController extends Controller
@@ -34,9 +35,7 @@ class TicketController extends Controller
             return response()->json(['message' => 'Invalid status transition.'], 422);
         }
 
-        $ticket = $this->ticketService->updateTicket($ticket, [
-            'status' => $newStatus,
-        ]);
+        $ticket = $this->ticketService->updateTicket($request->Validated(),$ticket);
 
         return response()->json([
             'message' => 'Ticket updated successfully.',
