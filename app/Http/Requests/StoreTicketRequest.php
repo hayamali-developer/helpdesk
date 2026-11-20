@@ -6,7 +6,6 @@ use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StoreTicketRequest extends FormRequest
@@ -27,11 +26,10 @@ class StoreTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-           "title" =>['required','string','max:255'],
-           "description" =>['required','string'],
-           "priority" =>['sometimes',new Enum(TicketPriority::class)],
-           "status" => ['sometimes',new Enum(TicketStatus::class)],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'priority' => ['sometimes', new Enum(TicketPriority::class)],
+            'status' => ['sometimes', new Enum(TicketStatus::class)],
         ];
     }
 }
-

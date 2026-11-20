@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable ,HasApiTokens;
+    use HasApiTokens, HasFactory ,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -27,10 +27,9 @@ class User extends Authenticatable
         'password',
     ];
 
-
     protected $casts = [
-    'role' => UserRole::class,
-   ];
+        'role' => UserRole::class,
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,9 +54,7 @@ class User extends Authenticatable
         ];
     }
 
-
     public function tickets()
-
     {
         return $this->hasMany(Ticket::class);
     }

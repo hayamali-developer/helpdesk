@@ -1,6 +1,6 @@
-<?php    
-namespace App\Services;
+<?php
 
+namespace App\Services;
 
 use App\Enums\TicketStatus;
 use App\Models\Ticket;
@@ -10,29 +10,26 @@ use DomainException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 
-class  TicketService
+class TicketService
 {
+    public function __construct(
+        protected TicketRepository $ticketRepository
+    ) {}
 
-public function __construct(
-    protected TicketRepository $ticketRepository
-){
+    public function createTicket(array $data, User $user)
+    {
 
-}
- public function createTicket(array $data ,User $user)
- {
+        $payload = [
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'status' => $data['status'] ?? 'open',
+            'priority' => $data['priority'] ?? 'medium',
+        ];
 
-    $payload=[
-        "title"=> $data["title"],
-        "description"=> $data["description"],
-        "status"=> $data["status"] ?? 'open',
-        'priority'=> $data['priority'] ??'medium',
-    ];
+        return $this->ticketRepository->create($payload, $user);
+    }
 
-    return $this->ticketRepository->create($payload, $user);
- }
-
-
-public function updateTicket(array $data, Ticket $ticket): Ticket
+    public function updateTicket(array $data, Ticket $ticket): Ticket
     {
         if (Arr::has($data, 'status')) {
             $this->updateStatus($ticket, $data['status']);
@@ -63,6 +60,7 @@ public function updateTicket(array $data, Ticket $ticket): Ticket
     {
         if (is_null($assigneeId)) {
             $ticket->unassign();
+
             return;
         }
 
@@ -82,5 +80,4 @@ public function updateTicket(array $data, Ticket $ticket): Ticket
             throw ValidationException::withMessages([$field => [$e->getMessage()]]);
         }
     }
-
 }
