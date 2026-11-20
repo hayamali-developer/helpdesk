@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Models;
+
 use App\Enums\TicketPriority;
 use App\Enums\TicketStatus;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
@@ -14,71 +14,63 @@ class Ticket extends Model
         'description',
         'priority',
         'status',
-        'assignee_id'
+        'assignee_id',
 
     ];
 
     protected $casts = [
-        'priority' => \App\Enums\TicketPriority::class,
-        'status' => \App\Enums\TicketStatus::class,
+        'priority' => TicketPriority::class,
+        'status' => TicketStatus::class,
     ];
-
 
     protected $attributes = [
         'status' => 'open',
-    ] ;
+    ];
 
-
-    public function user(){
-        return $this->belongsTo(User::class,'user_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function scopeForUser($query, $user)
+    {
+        if (! $user || $user->role !== 'admin') {
+            $userId = $user ? $user->id : null;
 
+            return $query->where('user_id', $userId);
+        }
 
-    public function scopeForUser($query, $user){
-   if(!$user || $user->role !=="admin"){
-    $userId= $user ? $user->id : null;
-    return $query->where('user_id', $userId);
-   }
-   return $query;
-}  
-
-
-public function scopeWithStatus($query, $status){
-    if(!$status){
-       return $query;
+        return $query;
     }
 
-return $query->where('status', $status);
+    public function scopeWithStatus($query, $status)
+    {
+        if (! $status) {
+            return $query;
+        }
 
+        return $query->where('status', $status);
 
-}
-
-public function scopeWithPriority($query, $priority){
-
-  if(!$priority){
-       return $query;
     }
 
-   return $query->where('priority', $priority);
-}
+    public function scopeWithPriority($query, $priority)
+    {
 
-public function assignee(){
+        if (! $priority) {
+            return $query;
+        }
 
-return $this->belongsTo(User::class,'assignee_id');
-}
-  
-  public function canTransactionTo(TicketStatus $newStatus): bool
-  {
-    return $this->status->canTransactionTo($newStatus);
-  }
+        return $query->where('priority', $priority);
+    }
 
+    public function assignee()
+    {
 
+        return $this->belongsTo(User::class, 'assignee_id');
+    }
 
-
-
-
-
-
-
+    public function canTransactionTo(TicketStatus $newStatus): bool
+    {
+        return $this->status->canTransactionTo($newStatus);
+    }
 }

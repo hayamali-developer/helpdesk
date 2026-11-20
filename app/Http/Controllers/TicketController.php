@@ -22,11 +22,11 @@ class TicketController extends Controller
 
         return response()->json([
             'message' => 'Ticket saved successfully.',
-            'ticket'  => TicketResource::make($ticket),
+            'ticket' => TicketResource::make($ticket),
         ], 201);
     }
 
-   public function update(UpdateTicketRequest $request, Ticket $ticket): JsonResponse
+    public function update(UpdateTicketRequest $request, Ticket $ticket): JsonResponse
     {
         // Check state transition if status is provided in the request
         if ($request->has('status')) {
@@ -41,7 +41,7 @@ class TicketController extends Controller
 
         return response()->json([
             'message' => 'Ticket updated successfully.',
-            'ticket'  => TicketResource::make($ticket),
+            'ticket' => TicketResource::make($ticket),
         ]);
     }
 }

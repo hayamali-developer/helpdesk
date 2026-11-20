@@ -1,18 +1,17 @@
-<?php 
+<?php
 
 namespace App\Enums;
 
-
-enum TicketStatus :string 
+enum TicketStatus: string
 {
-  case OPEN ="open";
-  case IN_PROGRESS ="in_progress";
-  case RESOLVED ="resolved";
-  case CLOSED= "closed";
+    case OPEN = 'open';
+    case IN_PROGRESS = 'in_progress';
+    case RESOLVED = 'resolved';
+    case CLOSED = 'closed';
 
-public function allowedTransitions(): array
+    public function allowedTransitions(): array
     {
-        return match($this) {
+        return match ($this) {
             self::OPEN => [self::IN_PROGRESS],
             self::IN_PROGRESS => [self::RESOLVED],
             self::RESOLVED => [self::IN_PROGRESS, self::CLOSED],
@@ -20,8 +19,8 @@ public function allowedTransitions(): array
         };
     }
 
-  public function canTransactionTo(TicketStatus $action): bool
-  {
-    return in_array($action,$this->allowedTransitions());
-  }
+    public function canTransactionTo(TicketStatus $action): bool
+    {
+        return in_array($action, $this->allowedTransitions());
+    }
 }
