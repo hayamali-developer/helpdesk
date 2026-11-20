@@ -17,7 +17,7 @@ class UpdateTicketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-       return $this->user()?->can('update', $this->route('ticket')) ?? false;
+        return $this->user()?->can('update', $this->route('ticket')) ?? false;
     }
 
     /**
@@ -49,7 +49,6 @@ class UpdateTicketRequest extends FormRequest
     //             return;
     //         }
 
-        
     //         $ticket = $this->route('ticket');
     //         $newStatus = TicketStatus::tryFrom((string) $this->input('status'));
 

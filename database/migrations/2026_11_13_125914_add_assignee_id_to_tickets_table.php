@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::table('tickets', function (Blueprint $table) {
             $table->foreignId('assignee_id')
-            ->nullable()
-            ->constrained('users')
-            ->nullOnDelete();
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
         });
     }
 

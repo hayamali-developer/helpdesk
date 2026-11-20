@@ -4,25 +4,23 @@ namespace App\Enums;
 
 use DomainException;
 
-enum UserRole :string
+enum UserRole: string
 {
-   case ADMIN = "admin" ;
-   case USER = "user";
-   case SUPPORT_AGENT="support_agent";
-   
-    public static function values(){
-        return array_column(self::cases(),"value");
-    }
+    case ADMIN = 'admin';
+    case USER = 'user';
+    case SUPPORT_AGENT = 'support_agent';
 
+    public static function values()
+    {
+        return array_column(self::cases(), 'value');
+    }
 
     public function canManageTickets(): bool
     {
-        return in_array($this,self::managementRoles() , true);
+        return in_array($this, self::managementRoles(), true);
     }
 
-
-
-       public static function managementRoles(): array
+    public static function managementRoles(): array
     {
         return [
             self::ADMIN,
@@ -30,12 +28,10 @@ enum UserRole :string
         ];
     }
 
-
     public function ensureCanBeAssignedTickets(): void
     {
         if (! $this->canManageTickets()) {
             throw new DomainException('The selected assignee must have a management role.');
         }
     }
-
 }
